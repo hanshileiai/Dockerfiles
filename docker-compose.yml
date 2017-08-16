@@ -1,0 +1,126 @@
+version: "2"
+services: 
+  # Nginx 1.11.10: https://hub.docker.com/_/nginx/
+  web:
+    image: nginx:1.12.1
+    ports:
+      - 8005:80
+    depends_on:
+      - php
+      - php1
+      - php2
+      - php3
+      - php4
+
+    # 同 php 一起共享 ./apps 目录
+    # volumes_from:
+    #   - php
+    # 创建一个数据卷，由 ./images/nginx/config => /etc/nginx/conf.d
+    volumes:
+      - ./apps:/apps
+      - ./images/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./images/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./logs/nginx:/var/log/nginx
+
+  # PHP 7.1-fpm: https://hub.docker.com/_/php/
+  php:
+    # image: php:7.1-fpm
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes: 
+      - ./apps:/apps
+      - ./images/php/config/php.ini:/usr/local/etc/php/php.ini
+      - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - db_newsapp_site:mysql
+  php1:
+    # image: php:7.1-fpm
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes: 
+      - ./apps:/apps
+      - ./images/php/config/php.ini:/usr/local/etc/php/php.ini
+      - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - db_newsapp_site:mysql
+  php2:
+    # image: php:7.1-fpm
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes: 
+      - ./apps:/apps
+      - ./images/php/config/php.ini:/usr/local/etc/php/php.ini
+      - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - db_newsapp_site:mysql
+  php3:
+    # image: php:7.1-fpm
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes: 
+      - ./apps:/apps
+      - ./images/php/config/php.ini:/usr/local/etc/php/php.ini
+      - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - db_newsapp_site:mysql
+  php4:
+    # image: php:7.1-fpm
+    build: 
+      context: ./images/php
+      dockerfile: Dockerfile
+    volumes: 
+      - ./apps:/apps
+      - ./images/php/config/php.ini:/usr/local/etc/php/php.ini
+      - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    links:
+      - db_newsapp_site:mysql
+
+  # 用于 Git，Composer 等工具
+  console:
+    build: 
+      context: ./images/console
+      dockerfile: Dockerfile
+    volumes_from: 
+      - php
+    tty: true
+  
+      
+  # MySQL 5.7  https://hub.docker.com/_/mysql/
+  # ------------ imgins_org_site---------------
+  db_newsapp_site: 
+    # image: mysql:5.7
+    build: 
+      context: ./images/mysql
+      dockerfile: Dockerfile
+    container_name: db_newsapp_site
+    # 设置 3306 端口映射以便远程连接
+    ports:
+      - 3307:3306
+    # 配置一些环境变量，具体的环境变量细节可以访问上面的网址查看
+    environment:
+      MYSQL_ROOT_PASSWORD: "moma"
+      MYSQL_DATABASE: "newsapp_site"
+      MYSQL_USER: "newsapp_site"
+      MYSQL_PASSWORD: "newsapp#20170815"
+    # command: bash -c "echo \"GRANT ALL PRIVILEGES ON *.* TO root@'%' IDENTIFIED BY 'hslhe' WITH GRANT OPTION; FLUSH PRIVILEGES;\" | mysql -uroot -phslhe"
+    # command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
+    volumes:
+      - ./databases/db_newsapp_site:/var/lib/mysql
+      - ./images/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+    # networks:
+    #   vpcbr:
+    #     ipv4_address: 10.0.0.2
+    mem_limit: 4000m
+    
+networks:
+  vpcbr:
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.0.0.0/16
+         gateway: 10.0.0.1

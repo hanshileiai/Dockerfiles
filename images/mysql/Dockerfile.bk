@@ -1,0 +1,10 @@
+#
+# MySQL Dockerfile
+#
+
+FROM mysql:5.7
+
+# Run install
+RUN /etc/init.d/mysql start && \ 
+    echo "grant all privileges on *.* to 'os.environ[\'MYSQL_USER\']'@'%' identified by 'os.environ[\'MYSQL_PASSWORD\']';FLUSH PRIVILEGES;" && \
+    mysql -uroot -p"os.environ['MYSQL_ROOT_PASSWORD']" -e "grant all privileges on *.* to 'os.environ[\'MYSQL_USER\']'@'%' identified by 'os.environ[\'MYSQL_PASSWORD\']';FLUSH PRIVILEGES;"
