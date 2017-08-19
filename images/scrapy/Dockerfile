@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER Ray <shilei@magicmoma.com>
 
-COPY sources.list /etc/apt/
+#COPY sources.list /etc/apt/
 
 ENV LANG=C.UTF-8
 
