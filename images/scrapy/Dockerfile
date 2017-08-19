@@ -1,7 +1,8 @@
 FROM ubuntu:14.04
 MAINTAINER Ray <shilei@magicmoma.com>
 
-COPY sources.list /etc/apt/
+#COPY sources.list /etc/apt/
+
 # add scrapy sources
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7 && \
         echo 'deb http://archive.scrapy.org/ubuntu scrapy main' | sudo tee /etc/apt/sources.list.d/scrapy.list && \
