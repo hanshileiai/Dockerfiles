@@ -1,7 +1,9 @@
 FROM ubuntu:14.04
 MAINTAINER Ray <shilei@magicmoma.com>
 
-#COPY sources.list /etc/apt/
+COPY sources.list /etc/apt/
+
+ENV LANG=C.UTF-8
 
 # add scrapy sources
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7 && \
@@ -9,7 +11,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7 && \
         apt-get update --fix-missing
 
 # install python and scrapy
-RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev libxslt-dev libffi-dev libssl-dev libmysqlclient-dev && \
+RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev libxslt-dev libffi-dev libssl-dev libmysqlclient-dev libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev opencc mailutils && \
         pip install --upgrade pip && pip install --upgrade virtualenv && \ 
         pip install lxml && pip install pyopenssl && pip install Scrapy && pip install --upgrade scrapy && \
         pip install --upgrade twisted && \
@@ -19,5 +21,6 @@ RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev 
         pip install unidecode && \
         pip install tldextract && \
         pip install python-dateutil && \
+        pip install pip install Pillow && \
         pip install python-resize-image && \
         pip install opencc
