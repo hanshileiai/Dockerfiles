@@ -17,4 +17,6 @@ RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev 
         pip install pyasn1 --upgrade && \
         pip install unidecode && \
         pip install tldextract && \
-        pip install python-dateutil
+        pip install python-dateutil && \
+        pip install python-resize-image && \
+        pip install opencc

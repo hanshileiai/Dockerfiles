@@ -143,20 +143,20 @@ services:
   #       ipv4_address: 10.0.0.3
   #   mem_limit: 4000m
 
-  # # python scrapy (yidianzixun, baijiahao, wechat)--------------------------
-  # scrapy_crawl:
-  #   build: 
-  #     context: ./images/scrapy
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - ./apps:/apps
-  #   links:
-  #     - db_scrapy_crawl_newsapp_site
-  #   restart: always
-  #   networks:
-  #     vpcbr:
-  #       ipv4_address: 10.0.0.4
-  #   mem_limit: 4000m
+  # python scrapy (yidianzixun, baijiahao, wechat)--------------------------
+  scrapy_crawl:
+    build: 
+      context: ./images/scrapy
+      dockerfile: Dockerfile
+    volumes:
+      - ./apps:/apps
+    links:
+      - db_newsapp_site
+    restart: always
+    networks:
+      vpcbr:
+        ipv4_address: 10.0.0.4
+    mem_limit: 4000m
 
 
 networks:
