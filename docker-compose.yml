@@ -4,7 +4,7 @@ services:
   web:
     image: nginx:1.12.1
     ports:
-      - 8005:80
+      - 80:80
     depends_on:
       - php
       - php1
