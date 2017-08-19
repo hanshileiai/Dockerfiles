@@ -21,6 +21,6 @@ RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev 
         pip install unidecode && \
         pip install tldextract && \
         pip install python-dateutil && \
-        pip install pip install Pillow && \
+        pip install Pillow && \
         pip install python-resize-image && \
         apt-get install opencc && pip install opencc
