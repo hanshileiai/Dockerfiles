@@ -11,7 +11,6 @@ services:
       - php2
       - php3
       - php4
-
     # 同 php 一起共享 ./apps 目录
     # volumes_from:
     #   - php
@@ -21,6 +20,7 @@ services:
       - ./images/nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./images/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./logs/nginx:/var/log/nginx
+    restart: always
 
   # PHP 7.1-fpm: https://hub.docker.com/_/php/
   php:
@@ -34,6 +34,7 @@ services:
       - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - db_newsapp_site
+    restart: always
   php1:
     # image: php:7.1-fpm
     build: 
@@ -45,6 +46,7 @@ services:
       - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - db_newsapp_site
+    restart: always
   php2:
     # image: php:7.1-fpm
     build: 
@@ -56,6 +58,7 @@ services:
       - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - db_newsapp_site
+    restart: always
   php3:
     # image: php:7.1-fpm
     build: 
@@ -67,6 +70,7 @@ services:
       - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - db_newsapp_site
+    restart: always
   php4:
     # image: php:7.1-fpm
     build: 
@@ -78,19 +82,19 @@ services:
       - ./images/php/config/www.conf:/usr/local/etc/php-fpm.d/www.conf
     links:
       - db_newsapp_site
+    restart: always
 
   # 用于 Git，Composer 等工具
-  console:
-    build: 
-      context: ./images/console
-      dockerfile: Dockerfile
-    volumes_from: 
-      - php
-    tty: true
-  
+  # console:
+  #   build: 
+  #     context: ./images/console
+  #     dockerfile: Dockerfile
+  #   volumes_from: 
+  #     - php
+  #   tty: true
       
   # MySQL 5.7  https://hub.docker.com/_/mysql/
-  # ------------ imgins_org_site---------------
+  # ------------ newsapp_site---------------
   db_newsapp_site: 
     # image: mysql:5.7
     build: 
@@ -116,7 +120,45 @@ services:
       vpcbr:
         ipv4_address: 10.0.0.2
     mem_limit: 4000m
-    
+
+  # ------------scrapy crawl --> newsapp_site --------------
+  # db_scrapy_crawl_newsapp_site: 
+  #   build: 
+  #     context: ./images/mysql
+  #     dockerfile: Dockerfile
+  #   container_name: db_scrapy_crawl_newsapp_site
+  #   ports:
+  #     - 3308:3306
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: "buzz#1982T"
+  #     MYSQL_DATABASE: "newsapp_site"
+  #     MYSQL_USER: "newsapp_site"
+  #     MYSQL_PASSWORD: "newsapp#20170815"
+  #   restart: always
+  #   volumes:
+  #     - ./databases/db_scrapy_crawl_newsapp_site:/var/lib/mysql
+  #     - ./images/mysql/mysql.conf.d/mysqld.cnf:/etc/mysql/mysql.conf.d/mysqld.cnf
+  #   networks:
+  #     vpcbr:
+  #       ipv4_address: 10.0.0.3
+  #   mem_limit: 4000m
+
+  # # python scrapy (yidianzixun, baijiahao, wechat)--------------------------
+  # scrapy_crawl:
+  #   build: 
+  #     context: ./images/scrapy
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./apps:/apps
+  #   links:
+  #     - db_scrapy_crawl_newsapp_site
+  #   restart: always
+  #   networks:
+  #     vpcbr:
+  #       ipv4_address: 10.0.0.4
+  #   mem_limit: 4000m
+
+
 networks:
   vpcbr:
     driver: bridge
