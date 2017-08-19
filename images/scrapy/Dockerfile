@@ -11,7 +11,7 @@ RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7 && \
         apt-get update --fix-missing
 
 # install python and scrapy
-RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev libxslt-dev libffi-dev libssl-dev libmysqlclient-dev libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev opencc mailutils && \
+RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev libxslt-dev libffi-dev libssl-dev libmysqlclient-dev libjpeg8 libjpeg62-dev libfreetype6 libfreetype6-dev mailutils && \
         pip install --upgrade pip && pip install --upgrade virtualenv && \ 
         pip install lxml && pip install pyopenssl && pip install Scrapy && pip install --upgrade scrapy && \
         pip install --upgrade twisted && \
@@ -23,4 +23,4 @@ RUN apt-get install -y python python-pip python-dev build-essential libxml2-dev 
         pip install python-dateutil && \
         pip install pip install Pillow && \
         pip install python-resize-image && \
-        pip install opencc
+        apt-get install opencc && pip install opencc
