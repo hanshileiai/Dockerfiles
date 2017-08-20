@@ -150,6 +150,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./apps:/apps
+      - ./images/scrapy/crontab:/var/spool/cron/crontabs/root
     links:
       - db_newsapp_site
     restart: always
@@ -157,6 +158,7 @@ services:
       vpcbr:
         ipv4_address: 10.0.0.4
     mem_limit: 4000m
+    tty: true
 
 
 networks:
